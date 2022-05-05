@@ -19,7 +19,6 @@ class Communication():
 		self.ser.read(self.ser.in_waiting)
 		self.ser.write(message)
 		response=self.ser.read(8)
-		print(response)
 		resp_handler=self.response_handler(response,message)
 		self.ser.close()
 		return resp_handler
