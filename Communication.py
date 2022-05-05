@@ -19,16 +19,19 @@ class Communication():
 		self.ser.read(self.ser.in_waiting)
 		self.ser.write(message)
 		response=self.ser.read(8)
-		resp_handler=self.response_handler(response)
+		resp_handler=self.response_handler(response,message)
 		self.ser.close()
 		return resp_handler
 
-	def response_handler(self,response):
-		vector=list(response)
-		resp_handler=0
-		if len(vector)!=8:
-			resp_handler=-1 #Timeout error
-		elif vector[1]==0:
-			resp_handler=vector[2]
+	def response_handler(self,response,message):
+		if response==message:
+			resp_handler=0
+		else:
+			resp_handler=-2 #Unkown response
+			vector=list(response)
+			if len(vector)!=8:
+				resp_handler=-1 #Timeout error
+			elif vector[1]==0:
+				resp_handler=vector[2]
 		return resp_handler
 
